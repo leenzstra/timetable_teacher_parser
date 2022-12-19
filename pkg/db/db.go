@@ -23,8 +23,8 @@ func Init(url string) *gorm.DB {
 		log.Fatalln(err)
 	}
 
-	db.Migrator().DropTable(&models.Teacher{}, &models.TeacherEvaluation{})
-	db.AutoMigrate(&models.Teacher{}, &models.TeacherEvaluation{})
+	// db.Migrator().DropTable(&models.Teacher{}, &models.TeacherEvaluation{})
+	db.AutoMigrate(&models.Teacher{})
 
 	return db
 }

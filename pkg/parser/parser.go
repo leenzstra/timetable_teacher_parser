@@ -39,6 +39,8 @@ func (p *Parser) Start(startUrl string) []models.Teacher {
 		fio := e.DOM.Find("div.head_block > div.head_info > h6").Text()
 		pos := e.DOM.Find("td[itemprop=Post]").Text()
 		depBase := e.DOM.Find("div.head_block > div.head_info > p").Text()
+		ImageUrl := e.DOM.Find("div.head_block > div.head_photo").AttrOr("style", "")
+
 		sid, err := strconv.Atoi(e.Request.URL.Query().Get("sid"))
 		if (err != nil) {
 			log.Error(err)
@@ -55,7 +57,13 @@ func (p *Parser) Start(startUrl string) []models.Teacher {
 			dep.Valid = false
 		}
 
-		t := models.Teacher{FIO: fio, Position: pos, Department: dep, Id: sid}
+		start = strings.Index(ImageUrl, "(")
+		end = strings.Index(ImageUrl, ")")
+		if (start != -1 && end != -1){
+			ImageUrl = ImageUrl[start+1:end]
+		}
+
+		t := models.Teacher{FIO: fio, Position: pos, Department: dep, Id: sid, ImageUrl: ImageUrl}
 		log.Println(t)
 		teachers = append(teachers, t)
 	})
